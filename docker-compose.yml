@@ -100,7 +100,7 @@ services:
     networks:
       - terra
   external-adapter:
-    image: denismaxim0v/terra-external-adapter
+    image: terrademo/terra-external-adapter
     container_name: external-adapter
     restart: on-failure
     ports:
@@ -108,7 +108,7 @@ services:
     networks:
       - terra
   contracts:
-    image: denismaxim0v/terra-contracts
+    image: terrademo/terra-contracts
     container_name: contracts
     restart: on-failure
     depends_on:
