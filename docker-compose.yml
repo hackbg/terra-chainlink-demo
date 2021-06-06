@@ -1,0 +1,146 @@
+version: "3"
+
+services:
+  chainlink:
+    image: smartcontract/chainlink:0.10.3
+    container_name: chainlink-node
+    restart: on-failure
+    ports:
+      - "6688:6688"
+    depends_on:
+      - postgres
+    secrets:
+      - node_password
+      - apicredentials
+    env_file:
+      - ./chainlink.env
+    environment:
+      - DATABASE_URL=postgresql://postgres@postgres:5432/chainlink?sslmode=disable
+    volumes:
+      - .:/host
+    networks:
+      - terra
+    entrypoint:
+      [
+        "chainlink",
+        "node",
+        "start",
+        "-d",
+        "-p",
+        "/run/secrets/node_password",
+        "-a",
+        "/run/secrets/apicredentials",
+      ]
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: on-failure
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=chainlink,ei,fcd
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - "./LocalTerra/init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./docker-init-scripts/postgres:/docker-entrypoint-initdb.d"
+      - "pg:/var/lib/postgresql/data"
+    networks:
+      - terra
+  terrad:
+    image: terramoney/localterra-core:0.4.9
+    volumes:
+      - ./LocalTerra/config:/root/.terrad/config
+    networks:
+      - terra
+    ports:
+      - "26657:26657"
+    command: terrad start
+  lcd:
+    image: terramoney/localterra-core:0.4.9
+    depends_on:
+      - terrad
+    volumes:
+      - ./LocalTerra/config:/root/.terrad/config
+    networks:
+      - terra
+    ports:
+      - "1317:1317"
+    command: terracli rest-server --laddr=tcp://0.0.0.0:1317 --node=tcp://terrad:26657 --trust-node=true --unsafe-cors
+  oracle:
+    image: terramoney/pseudo-feeder:0.5.2
+    depends_on:
+      - terrad
+      - lcd
+    networks:
+      - terra
+    environment:
+      TESTNET_LCD_URL: http://lcd:1317
+    command: start
+  fcd-collector:
+    image: terramoney/fcd:0.9.4
+    depends_on:
+      - terrad
+      - lcd
+      - postgres
+    volumes:
+      - ./LocalTerra/logs:/app/logs
+    networks:
+      - terra
+    env_file: ./LocalTerra/fcd.env
+    command: collector
+  fcd-api:
+    image: terramoney/fcd:0.9.4
+    depends_on:
+      - terrad
+      - lcd
+      - postgres
+    volumes:
+      - ./LocalTerra/logs:/app/logs
+    networks:
+      - terra
+    ports:
+      - 3060:3060
+    env_file: ./LocalTerra/fcd.env
+    command: start
+  mantle:
+    image: terramoney/mantle:0.3.10
+    depends_on:
+      - terrad
+      - lcd
+    volumes:
+      - ./LocalTerra/config/genesis.json:/app/genesis.json
+    networks:
+      - terra
+    ports:
+      - 1337:1337
+    environment:
+      DB_DIR: ./db
+      GENESIS_PATH: ./genesis.json
+      ENDPOINT: terrad:26657
+  coingecko-adapter:
+    image: public.ecr.aws/chainlink-staging/adapters/coingecko-adapter:develop-latest
+    container_name: coingecko-adapter
+    restart: on-failure
+    ports:
+      - "8083:8080"
+    networks:
+      - terra
+  external-adapter:
+    image: denismaxim0v/terra-external-adapter
+    container_name: external-adapter
+    restart: on-failure
+    ports:
+      - "8084:8080"
+    networks:
+      - terra
+volumes:
+  pg:
+  cl:
+  chain:
+secrets:
+  node_password:
+    file: ./secrets/password.txt
+  apicredentials:
+    file: ./secrets/apicredentials
+
+networks:
+  terra:
+    driver: bridge
