@@ -45,40 +45,31 @@ services:
     networks:
       - terra
   terrad:
-    image: terramoney/localterra-core:0.4.9
+    image: terramoney/localterra-core:bombay
+    pull_policy: always
     volumes:
-      - ./LocalTerra/config:/root/.terrad/config
+      - ./LocalTerra/config:/root/.terra/config
     networks:
       - terra
     ports:
       - "26657:26657"
-    command: terrad start
-  lcd:
-    image: terramoney/localterra-core:0.4.9
-    depends_on:
-      - terrad
-    volumes:
-      - ./LocalTerra/config:/root/.terrad/config
-    networks:
-      - terra
-    ports:
       - "1317:1317"
-    command: terracli rest-server --laddr=tcp://0.0.0.0:1317 --node=tcp://terrad:26657 --trust-node=true --unsafe-cors
+    command: terrad start
   oracle:
-    image: terramoney/pseudo-feeder:0.5.2
+    image: terramoney/pseudo-feeder:bombay
+    pull_policy: always
     depends_on:
       - terrad
-      - lcd
     networks:
       - terra
     environment:
-      TESTNET_LCD_URL: http://lcd:1317
+      TESTNET_LCD_URL: http://terrad:1317
     command: start
   fcd-collector:
-    image: terramoney/fcd:0.9.4
+    image: terramoney/fcd:bombay
+    pull_policy: always
     depends_on:
       - terrad
-      - lcd
       - postgres
     volumes:
       - ./LocalTerra/logs:/app/logs
@@ -87,34 +78,19 @@ services:
     env_file: ./LocalTerra/fcd.env
     command: collector
   fcd-api:
-    image: terramoney/fcd:0.9.4
-    depends_on:
-      - terrad
-      - lcd
-      - postgres
-    volumes:
-      - ./LocalTerra/logs:/app/logs
-    networks:
-      - terra
-    ports:
-      - 3060:3060
-    env_file: ./LocalTerra/fcd.env
-    command: start
-  mantle:
-    image: terramoney/mantle:0.3.10
-    depends_on:
-      - terrad
-      - lcd
-    volumes:
-      - ./LocalTerra/config/genesis.json:/app/genesis.json
-    networks:
-      - terra
-    ports:
-      - 1337:1337
-    environment:
-      DB_DIR: ./db
-      GENESIS_PATH: ./genesis.json
-      ENDPOINT: terrad:26657
+      image: terramoney/fcd:bombay
+      pull_policy: always
+      depends_on:
+        - terrad
+        - postgres
+      volumes:
+        - ./LocalTerra/logs:/app/logs
+      networks:
+        - terra
+      ports:
+        - 3060:3060
+      env_file: ./LocalTerra/fcd.env
+      command: start 
   coingecko-adapter:
     image: public.ecr.aws/chainlink-staging/adapters/coingecko-adapter:develop-latest
     container_name: coingecko-adapter
@@ -131,6 +107,20 @@ services:
       - "8084:8080"
     networks:
       - terra
+  contracts:
+    image: denismaxim0v/terra-contracts
+    container_name: contracts
+    restart: on-failure
+    depends_on:
+      - terrad
+      - chainlink
+      - fcd-collector
+      - fcd-api
+    networks:
+      - terra
+    environment: 
+      - TERRA_HOST=http://terrad:1317
+      - CHAIN_ID=localterra
 volumes:
   pg:
   cl:
