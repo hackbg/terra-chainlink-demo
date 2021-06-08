@@ -75,7 +75,7 @@ services:
       - ./LocalTerra/logs:/app/logs
     networks:
       - terra
-    env_file: ./LocalTerra/fcd.env
+    env_file: ./fcd.env
     command: collector
   fcd-api:
       image: terramoney/fcd:bombay
@@ -89,7 +89,7 @@ services:
         - terra
       ports:
         - 3060:3060
-      env_file: ./LocalTerra/fcd.env
+      env_file: ./fcd.env
       command: start 
   coingecko-adapter:
     image: public.ecr.aws/chainlink-staging/adapters/coingecko-adapter:develop-latest
@@ -107,20 +107,6 @@ services:
       - "8084:8080"
     networks:
       - terra
-  contracts:
-    image: terrademo/terra-contracts
-    container_name: contracts
-    restart: on-failure
-    depends_on:
-      - terrad
-      - chainlink
-      - fcd-collector
-      - fcd-api
-    networks:
-      - terra
-    environment: 
-      - TERRA_HOST=http://terrad:1317
-      - CHAIN_ID=localterra
 volumes:
   pg:
   cl:
