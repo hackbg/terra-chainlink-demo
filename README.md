@@ -1,4 +1,4 @@
-# Chainlink <> Terrra demo
+# Chainlink <> Terra demo
 
 ## Setup
 1. Run all services

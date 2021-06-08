@@ -14,3 +14,9 @@ sleep 15
 ./scripts/bash/run-chainlink.sh
 echo "Waiting for chainlink services to be ready"
 sleep 15
+./scripts/bash/run-adapter.sh
+echo "Waiting for the external adapter to be ready"
+sleep 10
+./scripts/bash/add-bridges.sh
+echo "Waiting for bridges to be added"
+sleep 5
