@@ -8,9 +8,13 @@ import {
 } from "@terra-money/terra.js";
 
 const LINK_PATH =
-  "../terra-contracts/contracts/artifacts/link_token.wasm";
+  "../../terra-contracts/contracts/artifacts/link_token.wasm";
 const FLUX_PATH =
-  "../terra-contracts/contracts/artifacts/flux_aggregator.wasm";
+  "../../terra-contracts/contracts/artifacts/flux_aggregator.wasm";
+const FLAGS_PATH =
+  "../../terra-contracts/contracts/artifacts/flags.wasm";
+const DEVIATION_FLAGGING_VALIDATOR_PATH =
+  "../../terra-contracts/contracts/artifacts/deviation_flagging_validator.wasm";
 
 const mk = new MnemonicKey({
   mnemonic:
@@ -39,9 +43,14 @@ async function run() {
     decimals: 18,
     description: "pass",
   });
+  const flagsAddr = await uploadAndInstantiate(FLAGS_PATH, {})
+  const deviationFlaggingValidatorAddr = await uploadAndInstantiate(DEVIATION_FLAGGING_VALIDATOR_PATH, {
+    flags: flagsAddr,
+    flagging_threshold: 100000
+  })
 
   const result = await terra.wasm.contractQuery(linkAddr, { token_info: {} });
-  console.log(result);
+  console.log(result)
 
   await updateAvailableFunds(fluxAddr);
 }
@@ -65,11 +74,8 @@ async function updateAvailableFunds(address) {
 }
 
 async function uploadAndInstantiate(contractPath, instantiateMsg) {
-  console.log(contractPath)
   const wasm = readFileSync(contractPath);
   const tx = new MsgStoreCode(mk.accAddress, wasm.toString("base64"));
-  console.log(wasm.length)
-  console.log(tx.sender)
 
   try {
     const storeResult = await wallet
