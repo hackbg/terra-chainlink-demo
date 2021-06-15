@@ -108,12 +108,13 @@ services:
   external-initiator:
     image: terrademo/terra-ei
     container_name: external-initiator
-    command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"ws://localhost:26657/websocket/\"}'
+    command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"ws://terrad:26657/websocket\"}'
     depends_on:
       - postgres
     environment:
       - EI_DATABASEURL=postgresql://ei@postgres:5432/ei?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node:6688/
+      - TERRA_URL=http://terrad:1317
     env_file:
       - ./external_initiator.env
     networks:
