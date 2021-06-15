@@ -1,12 +1,12 @@
-version: "3"
-
+---
+version: '3'
 services:
   chainlink:
     image: smartcontract/chainlink:0.10.3
     container_name: chainlink-node
     restart: on-failure
     ports:
-      - "6688:6688"
+      - '6688:6688'
     depends_on:
       - postgres
     secrets:
@@ -21,16 +21,14 @@ services:
     networks:
       - terra
     entrypoint:
-      [
-        "chainlink",
-        "node",
-        "start",
-        "-d",
-        "-p",
-        "/run/secrets/node_password",
-        "-a",
-        "/run/secrets/apicredentials",
-      ]
+      - chainlink
+      - node
+      - start
+      - '-d'
+      - '-p'
+      - /run/secrets/node_password
+      - '-a'
+      - /run/secrets/apicredentials
   postgres:
     image: postgres:13
     container_name: postgres
@@ -39,9 +37,9 @@ services:
       - POSTGRES_MULTIPLE_DATABASES=chainlink,ei,fcd
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - "./LocalTerra/init.sql:/docker-entrypoint-initdb.d/init.sql"
-      - "./docker-init-scripts/postgres:/docker-entrypoint-initdb.d"
-      - "pg:/var/lib/postgresql/data"
+      - ./LocalTerra/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker-init-scripts/postgres:/docker-entrypoint-initdb.d
+      - pg:/var/lib/postgresql/data
     networks:
       - terra
   terrad:
@@ -52,8 +50,8 @@ services:
     networks:
       - terra
     ports:
-      - "26657:26657"
-      - "1317:1317"
+      - '26657:26657'
+      - '1317:1317'
     command: terrad start
   oracle:
     image: terramoney/pseudo-feeder:bombay
@@ -78,25 +76,25 @@ services:
     env_file: ./fcd.env
     command: collector
   fcd-api:
-      image: terramoney/fcd:bombay
-      pull_policy: always
-      depends_on:
-        - terrad
-        - postgres
-      volumes:
-        - ./LocalTerra/logs:/app/logs
-      networks:
-        - terra
-      ports:
-        - 3060:3060
-      env_file: ./fcd.env
-      command: start 
+    image: terramoney/fcd:bombay
+    pull_policy: always
+    depends_on:
+      - terrad
+      - postgres
+    volumes:
+      - ./LocalTerra/logs:/app/logs
+    networks:
+      - terra
+    ports:
+      - '3060:3060'
+    env_file: ./fcd.env
+    command: start
   coingecko-adapter:
     image: public.ecr.aws/chainlink-staging/adapters/coingecko-adapter:develop-latest
     container_name: coingecko-adapter
     restart: on-failure
     ports:
-      - "8083:8080"
+      - '8083:8080'
     networks:
       - terra
   external-adapter:
@@ -104,19 +102,31 @@ services:
     container_name: external-adapter
     restart: on-failure
     ports:
-      - "8084:8080"
+      - '8084:8080'
+    networks:
+      - terra
+  external-initiator:
+    image: terrademo/terra-ei
+    container_name: external-initiator
+    command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"ws://localhost:26657/websocket/\"}'
+    depends_on:
+      - postgres
+    environment:
+      - EI_DATABASEURL=postgresql://ei@postgres:5432/ei?sslmode=disable
+      - EI_CHAINLINKURL=http://chainlink-node:6688/
+    env_file:
+      - ./external_initiator.env
     networks:
       - terra
 volumes:
-  pg:
-  cl:
-  chain:
+  pg: null
+  cl: null
+  chain: null
 secrets:
   node_password:
     file: ./secrets/password.txt
   apicredentials:
     file: ./secrets/apicredentials
-
 networks:
   terra:
     driver: bridge

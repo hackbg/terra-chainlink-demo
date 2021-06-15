@@ -20,3 +20,8 @@ sleep 10
 ./scripts/bash/add-bridges.sh
 echo "Waiting for bridges to be added"
 sleep 5
+./scripts/bash/ei-config.sh
+echo "Configuring ei"
+sleep 5
+./scripts/bash/run-ei.sh
+echo "Starting ei"
