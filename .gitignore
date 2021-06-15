@@ -3,3 +3,4 @@ artifacts/
 logs/
 cookiefile
 credentials
+external_initiator.env
