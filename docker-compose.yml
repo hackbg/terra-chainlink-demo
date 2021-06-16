@@ -98,11 +98,15 @@ services:
     networks:
       - terra
   external-adapter:
-    image: terrademo/terra-external-adapter
+    image: terra-adapter:0.0.1
     container_name: external-adapter
     restart: on-failure
     ports:
       - '8084:8080'
+    environment:
+      - FCD_URL=http://terrad:1317
+      - CHAIN_ID=localterra
+      - MNEMONIC="satisfy adjust timber high purchase tuition stool faith fine install that you unaware feed domain license impose boss human eager hat rent enjoy dawn"
     networks:
       - terra
   external-initiator:
