@@ -24,8 +24,8 @@ sleep 10
 
 ./scripts/bash/run-adapters.sh
 
+./scripts/bash/add-bridges.sh
+
 ./scripts/bash/ei-config.sh
 
 ./scripts/bash/run-ei.sh
-
-./scripts/bash/add-bridges.sh
