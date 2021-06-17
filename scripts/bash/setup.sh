@@ -8,23 +8,24 @@ cd $(dirname ${BASH_SOURCE[0]})/../..
 ls
 docker-compose down --remove-orphans --volumes
 
+echo "Starting Coingecko source adapter"
 docker-compose up -d coingecko-adapter
-echo "Coingecko source adapter started"
 
 ./scripts/bash/run-terra.sh
-echo "Waiting for terra services to be ready"
+echo "Waiting for localterra services to be ready"
+sleep 6
+
+echo "Uploading Chainlink contracts"
+(cd ./scripts/terrajs && yarn start)
 
 ./scripts/bash/run-chainlink.sh
 echo "Waiting for chainlink services to be ready"
 sleep 10
-./scripts/bash/run-adapter.sh
-echo "Waiting for the external adapter to be ready"
 
-./scripts/bash/add-bridges.sh
-echo "Waiting for bridges to be added"
+./scripts/bash/run-adapters.sh
 
 ./scripts/bash/ei-config.sh
-echo "Configuring ei"
 
 ./scripts/bash/run-ei.sh
-echo "Starting ei"
+
+./scripts/bash/add-bridges.sh
