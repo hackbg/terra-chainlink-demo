@@ -4,6 +4,9 @@
 [submodule "terra-contracts/contracts"]
 	path = terra-contracts/contracts
 	url = https://github.com/hackbg/chainlink-terra-cosmwasm-contracts
+[submodule "LocalTerra"]
+	path = LocalTerra
+	url = https://github.com/terra-money/LocalTerra
 [submodule "external-initiator"]
 	path = external-initiator
 	url = https://github.com/hackbg/external-initiator.git
