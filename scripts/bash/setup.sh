@@ -8,6 +8,8 @@ cd $(dirname ${BASH_SOURCE[0]})/../..
 ls
 docker-compose down --remove-orphans --volumes
 
+docker-compose up -d coingecko-adapter
+echo "Coingecko source adapter started"
 ./scripts/bash/run-terra.sh
 echo "Waiting for terra services to be ready"
 sleep 15

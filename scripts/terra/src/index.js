@@ -95,7 +95,7 @@ async function addOracles(address, oracles) {
       added_admins: oracles,
       min_submissions: oracles.length,
       max_submissions: oracles.length,
-      restart_delay: 1,
+      restart_delay: 0,
     },
   });
 }
