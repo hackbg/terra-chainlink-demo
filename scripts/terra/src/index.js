@@ -64,6 +64,9 @@ async function run() {
   await updateAvailableFunds(fluxAddr);
 
   await addOracles(fluxAddr, ORACLES);
+  for (const oracle of ORACLES) {
+    await transferLink(linkAddr, oracle, "10000");
+  }
 
   console.table({
     LINK: linkAddr,
@@ -83,6 +86,15 @@ async function sendLink(address, recipient, amount) {
       amount,
       contract: recipient,
       msg: Buffer.from("").toString("base64"),
+    },
+  });
+}
+
+async function transferLink(address, recipient, amount) {
+  await executeContract(address, {
+    transfer: {
+      amount,
+      recipient,
     },
   });
 }

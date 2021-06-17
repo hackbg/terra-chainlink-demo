@@ -97,7 +97,7 @@ services:
       - '8083:8080'
     networks:
       - terra
-  external-adapter:
+  external-adapter1:
     image: terra-adapter:0.0.1
     container_name: external-adapter1
     restart: on-failure
@@ -106,10 +106,10 @@ services:
     environment:
       - FCD_URL=http://terrad:1317
       - CHAIN_ID=localterra
-      - MNEMONIC="symbol force gallery make bulk round subway violin worry mixture penalty kingdom boring survey tool fringe patrol sausage hard admit remember broken alien absorb"
+      - MNEMONIC=symbol force gallery make bulk round subway violin worry mixture penalty kingdom boring survey tool fringe patrol sausage hard admit remember broken alien absorb
     networks:
       - terra
-  external-adapter:
+  external-adapter2:
     image: terra-adapter:0.0.1
     container_name: external-adapter2
     restart: on-failure
@@ -118,7 +118,7 @@ services:
     environment:
       - FCD_URL=http://terrad:1317
       - CHAIN_ID=localterra
-      - MNEMONIC="quality vacuum heart guard buzz spike sight swarm shove special gym robust assume sudden deposit grid alcohol choice devote leader tilt noodle tide penalty"
+      - MNEMONIC=quality vacuum heart guard buzz spike sight swarm shove special gym robust assume sudden deposit grid alcohol choice devote leader tilt noodle tide penalty
     networks:
       - terra
   external-initiator:
