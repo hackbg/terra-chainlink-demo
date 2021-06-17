@@ -1,9 +1,6 @@
 [submodule "external-adapters"]
 	path = external-adapters
 	url = https://github.com/hackbg/external-adapters-js
-[submodule "LocalTerra"]
-	path = LocalTerra
-	url = https://github.com/terra-money/LocalTerra
 [submodule "terra-contracts/contracts"]
 	path = terra-contracts/contracts
 	url = https://github.com/hackbg/chainlink-terra-cosmwasm-contracts
