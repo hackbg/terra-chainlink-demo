@@ -35,17 +35,22 @@ const wallet = terra.wallet(mk);
 run();
 
 async function run() {
+  console.log("Uploading Flags and Deviation Flagging Validator...");
   const flagsAddr = await uploadAndInstantiate(FLAGS_PATH, {
     rac_address: "terra183rx7pqzjwj4mj7rxrrgv589zsfl22yeagalc0", // placeholder
   });
-
   const dfaAddr = await uploadAndInstantiate(VALIDATOR_PATH, {
     flags: flagsAddr,
     flagging_threshold: 5,
   });
 
+  console.log("Uploading LINK Token...");
   const linkAddr = await uploadAndInstantiate(LINK_PATH, {});
 
+  const result = await terra.wasm.contractQuery(linkAddr, { token_info: {} });
+  console.log(result);
+
+  console.log("Uploading Flux Aggregator...");
   const fluxAddr = await uploadAndInstantiate(FLUX_PATH, {
     link: linkAddr,
     payment_amount: "100",
@@ -54,16 +59,16 @@ async function run() {
     max_submission_value: "10000000",
     timeout: 100,
     decimals: 18,
-    description: "pass",
+    description: "LUNA/USD",
   });
 
-  const result = await terra.wasm.contractQuery(linkAddr, { token_info: {} });
-  console.log(result);
-
+  console.log("Supplying Flux Aggregator with LINK...");
   await sendLink(linkAddr, fluxAddr, "1000000");
   await updateAvailableFunds(fluxAddr);
 
+  console.log(`Adding oracles: ${ORACLES}`);
   await addOracles(fluxAddr, ORACLES);
+  console.log("Supplying oracles with LINK...");
   for (const oracle of ORACLES) {
     await transferLink(linkAddr, oracle, "10000");
   }
