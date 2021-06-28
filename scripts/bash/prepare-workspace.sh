@@ -11,5 +11,5 @@ git submodule update --init --recursive
 (cd ./external-initiator && docker build . -t terrademo/terra-ei)
 
 (cd ./external-adapters && yarn && yarn setup && \
-    yarn generate:docker-compose && \
+    # yarn generate:docker-compose && \
     docker-compose -f docker-compose.generated.yaml build terra-adapter)
