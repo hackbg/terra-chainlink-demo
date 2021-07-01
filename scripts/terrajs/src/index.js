@@ -55,10 +55,10 @@ async function run() {
     link: linkAddr,
     payment_amount: "100",
     validator: dfaAddr,
-    min_submission_value: "1",
-    max_submission_value: "10000000",
+    min_submission_value: "100000000",
+    max_submission_value: "10000000000",
     timeout: 100,
-    decimals: 18,
+    decimals: 8,
     description: "LUNA/USD",
   });
 
