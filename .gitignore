@@ -4,3 +4,4 @@ logs/
 cookiefile
 credentials
 external_initiator.env
+addresses.json
