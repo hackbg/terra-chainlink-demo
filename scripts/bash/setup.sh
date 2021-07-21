@@ -29,3 +29,10 @@ sleep 10
 ./scripts/bash/ei-config.sh
 
 ./scripts/bash/run-ei.sh
+echo "Waiting for external initiator to be ready"
+sleep 10
+
+./scripts/bash/add-jobspecs.sh
+
+echo "Retrieving current price"
+(cd ./scripts/terrajs/src && yarn checkAnswer)

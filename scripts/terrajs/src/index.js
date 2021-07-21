@@ -1,4 +1,5 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
+
 import {
   LCDClient,
   MnemonicKey,
@@ -73,7 +74,7 @@ async function run() {
     await transferLink(linkAddr, oracle, "10000");
   }
 
-  console.table({
+  const deployedContracts = {
     LINK: linkAddr,
     FLUX_AGGREGATOR: fluxAddr,
     FLAGS: flagsAddr,
@@ -82,7 +83,11 @@ async function run() {
       acc[`oracle_${i}`] = addr;
       return acc;
     }, {}),
-  });
+  }
+  console.table(deployedContracts);
+
+  writeFileSync('./addresses.json', JSON.stringify(deployedContracts));
+
 }
 
 async function sendLink(address, recipient, amount) {
