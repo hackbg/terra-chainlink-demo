@@ -14,3 +14,6 @@
 	path = external-initiator
 	url = https://github.com/hackbg/external-initiator.git
 	branch = feature/terra-integration
+[submodule "terra-fm-metrics-exporter"]
+	path = terra-fm-metrics-exporter
+	url = git@github.com:hackbg/terra-fm-metrics-exporter.git

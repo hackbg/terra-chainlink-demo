@@ -51,7 +51,9 @@ services:
       - terra
     ports:
       - '26657:26657'
+      - '26660:26660'
       - '1317:1317'
+      - '9090:9090'
     command: terrad start
   oracle:
     image: terramoney/pseudo-feeder:bombay
@@ -135,10 +137,46 @@ services:
       - ./external_initiator.env
     networks:
       - terra
+  prometheus:
+    image: prom/prometheus:v2.1.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+          - 9091:9090
+    links:
+      - terrad:terrad
+    depends_on:
+      - terrad
+    networks:
+      - terra
+    restart: always
+  terra-chainlink-exporter:
+    image: terra-chainlink-exporter
+    ports:
+      - 8089:8089
+    depends_on:
+      - terrad
+      - prometheus
+    links:
+      - terrad:terrad
+    environment: 
+      - TERRA_RPC=terrad:9090
+      - TENDERMINT_RPC=http://terrad:26657
+      - GRPC_GO_LOG_VERBOSITY_LEVEL=99
+      - GRPC_GO_LOG_SEVERITY_LEVEL=info
+    networks:
+      - terra
 volumes:
   pg: null
   cl: null
   chain: null
+  prometheus_data: null
 secrets:
   node_password:
     file: ./secrets/password.txt

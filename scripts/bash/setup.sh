@@ -18,6 +18,9 @@ sleep 6
 echo "Uploading Chainlink contracts"
 (cd ./scripts/terrajs && yarn start)
 
+docker-compose up -d prometheus
+docker-compose up -d terra-chainlink-exporter
+
 ./scripts/bash/run-chainlink.sh
 echo "Waiting for chainlink services to be ready"
 sleep 10
