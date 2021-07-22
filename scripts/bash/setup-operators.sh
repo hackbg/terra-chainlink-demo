@@ -7,7 +7,7 @@ echo "*** Run node operators ***"
 echo "Starting Chainlink nodes "
 docker-compose up -d postgres chainlink-node-1 chainlink-node-2 chainlink-node-3
 echo "Waiting for chainlink nodes to be ready"
-sleep 10
+sleep 20
 
 echo "Starting Chain adapters"
 docker-compose up -d chain-adapter-1 chain-adapter-2 chain-adapter-3
