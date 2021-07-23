@@ -24,8 +24,8 @@ cat <<EOF
             "requestData": {
               "data": { "from": "LUNA", "to": "USD" }
             },
-            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" }, { "url": "http://price-adapter-3:8080" }],
-            "threshold": 0.5,
+            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-3:8080" }],
+            "threshold": 0.1,
             "absoluteThreshold": 0,
             "precision": 8,
             "pollTimer": { "period": "30s" },
@@ -68,8 +68,8 @@ cat <<EOF
             "requestData": {
               "data": { "from": "LUNA", "to": "USD" }
             },
-            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" }, { "url": "http://price-adapter-3:8080" }],
-            "threshold": 0.5,
+            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-3:8080" }],
+            "threshold": 0.1,
             "absoluteThreshold": 0,
             "precision": 8,
             "pollTimer": { "period": "30s" },
@@ -112,8 +112,8 @@ cat <<EOF
             "requestData": {
               "data": { "from": "LUNA", "to": "USD" }
             },
-            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" }, { "url": "http://price-adapter-3:8080" }],
-            "threshold": 0.5,
+            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-3:8080" }],
+            "threshold": 0.1,
             "absoluteThreshold": 0,
             "precision": 8,
             "pollTimer": { "period": "30s" },

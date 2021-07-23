@@ -173,6 +173,7 @@ services:
     ports:
       - "8084:8080"
     environment:
+      # free keys, not security-critical, but need to be provided externally eventually
       - API_KEY=8752418fc8665de247def11dadf97aae7e3bb090
 
   price-adapter-3:
