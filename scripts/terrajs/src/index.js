@@ -1,4 +1,5 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
+
 import {
   LCDClient,
   MnemonicKey,
@@ -17,7 +18,6 @@ const FLUX_PATH =
 const ORACLES = [
   "terra1757tkx08n0cqrw7p86ny9lnxsqeth0wgp0em95",
   "terra17lmam6zguazs5q5u6z5mmx76uj63gldnse2pdp",
-  "terra199vw7724lzkwz6lf2hsx04lrxfkz09tg8dlp6r",
 ];
 
 const mk = new MnemonicKey({
@@ -74,7 +74,7 @@ async function run() {
     await transferLink(linkAddr, oracle, "10000");
   }
 
-  console.table({
+  const deployedContracts = {
     LINK: linkAddr,
     FLUX_AGGREGATOR: fluxAddr,
     FLAGS: flagsAddr,
@@ -83,7 +83,11 @@ async function run() {
       acc[`oracle_${i}`] = addr;
       return acc;
     }, {}),
-  });
+  }
+  console.table(deployedContracts);
+
+  writeFileSync('./addresses.json', JSON.stringify(deployedContracts));
+
 }
 
 async function sendLink(address, recipient, amount) {
