@@ -18,6 +18,7 @@ const FLUX_PATH =
 const ORACLES = [
   "terra1757tkx08n0cqrw7p86ny9lnxsqeth0wgp0em95",
   "terra17lmam6zguazs5q5u6z5mmx76uj63gldnse2pdp",
+  "terra199vw7724lzkwz6lf2hsx04lrxfkz09tg8dlp6r"
 ];
 
 const mk = new MnemonicKey({
