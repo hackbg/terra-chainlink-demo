@@ -144,6 +144,7 @@ async function executeContract(address, msg) {
     console.log(result.raw_log);
   } catch (error) {
     console.error(error.toString());
+    process.exit(2);
   }
 }
 
