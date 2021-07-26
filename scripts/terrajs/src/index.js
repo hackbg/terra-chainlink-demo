@@ -69,10 +69,6 @@ async function run() {
 
   console.log(`Adding oracles: ${ORACLES}`);
   await addOracles(fluxAddr, ORACLES);
-  console.log("Supplying oracles with LINK...");
-  for (const oracle of ORACLES) {
-    await transferLink(linkAddr, oracle, "10000");
-  }
 
   const deployedContracts = {
     LINK: linkAddr,
@@ -83,11 +79,10 @@ async function run() {
       acc[`oracle_${i}`] = addr;
       return acc;
     }, {}),
-  }
+  };
   console.table(deployedContracts);
 
-  writeFileSync('./addresses.json', JSON.stringify(deployedContracts));
-
+  writeFileSync("./addresses.json", JSON.stringify(deployedContracts));
 }
 
 async function sendLink(address, recipient, amount) {
@@ -149,6 +144,7 @@ async function executeContract(address, msg) {
     console.log(result.raw_log);
   } catch (error) {
     console.error(error.toString());
+    process.exit(2);
   }
 }
 
