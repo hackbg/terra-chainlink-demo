@@ -14,8 +14,14 @@ const terra = new LCDClient({
 run();
 
 async function run() {
-  const addresses = JSON.parse(readFileSync('addresses.json', { encoding: 'utf8' }));
-  const result = await terra.wasm.contractQuery(addresses['FLUX_AGGREGATOR'], { get_latest_round_data: {} });
-  console.log(result);
+  const addressesLINKUSD = JSON.parse(readFileSync('addresses-LINKUSD.json', { encoding: 'utf8' }));
+  const resultLINKUSD = await terra.wasm.contractQuery(addressesLINKUSD['FLUX_AGGREGATOR'], { get_latest_round_data: {} });
+  console.log("LINK / USD answer:");
+  console.log(resultLINKUSD);
+
+  const addressesLUNAUSD = JSON.parse(readFileSync('addresses-LUNAUSD.json', { encoding: 'utf8' }));
+  const resultLUNAUSD = await terra.wasm.contractQuery(addressesLUNAUSD['FLUX_AGGREGATOR'], { get_latest_round_data: {} });
+  console.log("LUNA / USD answer:");
+  console.log(resultLUNAUSD);
 }
 

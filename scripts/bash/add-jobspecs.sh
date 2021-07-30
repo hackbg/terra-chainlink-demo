@@ -18,7 +18,7 @@ cat << EOF
           "account_address": "$1",
           "fluxmonitor": {
             "requestData": {
-              "data": { "from": "LUNA", "to": "USD" }
+              "data": { "from": "LINK", "to": "USD" }
             },
             "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" },  { "url": "http://price-adapter-3:8080" }],
             "threshold": 0.1,
@@ -26,6 +26,45 @@ cat << EOF
             "precision": 8,
             "pollTimer": { "period": "30s" },
             "idleTimer": { "duration": "1m" }
+          }
+        }
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "type": "$2",
+      "params": {}
+    }
+  ]
+}
+EOF
+)
+}
+
+function jobspec2() {
+echo $(
+cat << EOF
+{
+  "initiators": [
+    {
+      "type": "external",
+      "params": {
+        "name": "terra",
+        "body": {
+          "endpoint": "terra",
+          "contract_address": "terra1z449mpul3pwkdd3892gv28ewv5l06w7895wewm",
+          "account_address": "$1",
+          "fluxmonitor": {
+            "requestData": {
+              "data": { "from": "LUNA", "to": "USD" }
+            },
+            "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" },  { "url": "http://price-adapter-3:8080" }],
+            "threshold": 0.1,
+            "absoluteThreshold": 0,
+            "precision": 8,
+            "pollTimer": { "period": "15s" },
+            "idleTimer": { "duration": "30s" }
           }
         }
       }
@@ -50,6 +89,9 @@ BRIDGE_NAME="terra-adapter1"
 JOBID=$(curl -s -b ./cookiefile -d "$(jobspec $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
 echo $JOBID
 
+JOBID=$(curl -s -b ./cookiefile -d "$(jobspec2 $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
+echo $JOBID
+
 
 CL_URL="http://localhost:6692"
 login_cl "$CL_URL"
@@ -59,6 +101,9 @@ BRIDGE_NAME="terra-adapter2"
 JOBID=$(curl -s -b ./cookiefile -d "$(jobspec $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
 echo $JOBID
 
+JOBID=$(curl -s -b ./cookiefile -d "$(jobspec2 $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
+echo $JOBID
+
 
 CL_URL="http://localhost:6693"
 login_cl "$CL_URL"
@@ -66,6 +111,9 @@ ORACLE_ADDRESS="terra199vw7724lzkwz6lf2hsx04lrxfkz09tg8dlp6r"
 BRIDGE_NAME="terra-adapter3"
 
 JOBID=$(curl -s -b ./cookiefile -d "$(jobspec $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
+echo $JOBID
+
+JOBID=$(curl -s -b ./cookiefile -d "$(jobspec2 $ORACLE_ADDRESS $BRIDGE_NAME)" -X POST -H 'Content-Type: application/json' "$CL_URL/v2/specs")
 echo $JOBID
 
 

@@ -4,6 +4,8 @@ set -e
 
 echo "*** Run all ***"
 
+docker-compose down --remove-orphans --volumes
+
 ./scripts/bash/setup-feeds.sh
 
 ./scripts/bash/setup-operators.sh
