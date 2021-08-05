@@ -151,7 +151,7 @@ async function addOracles(address, oracles) {
       removed: [],
       added: oracles,
       added_admins: oracles,
-      min_submissions: oracles.length,
+      min_submissions: oracles.length-1,
       max_submissions: oracles.length,
       restart_delay: 0,
     },
