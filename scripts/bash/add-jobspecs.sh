@@ -21,11 +21,11 @@ cat << EOF
               "data": { "from": "LINK", "to": "USD" }
             },
             "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" },  { "url": "http://price-adapter-3:8080" }],
-            "threshold": 0.1,
+            "threshold": 0.3,
             "absoluteThreshold": 0,
             "precision": 8,
-            "pollTimer": { "period": "30s" },
-            "idleTimer": { "duration": "1m" }
+            "pollTimer": { "period": "5s" },
+            "idleTimer": { "duration": "50s" }
           }
         }
       }
@@ -60,11 +60,11 @@ cat << EOF
               "data": { "from": "LUNA", "to": "USD" }
             },
             "feeds": [{ "url": "http://price-adapter-1:8080" }, { "url": "http://price-adapter-2:8080" },  { "url": "http://price-adapter-3:8080" }],
-            "threshold": 0.1,
+            "threshold": 0.3,
             "absoluteThreshold": 0,
             "precision": 8,
-            "pollTimer": { "period": "15s" },
-            "idleTimer": { "duration": "30s" }
+            "pollTimer": { "period": "5s" },
+            "idleTimer": { "duration": "50s" }
           }
         }
       }
