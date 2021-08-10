@@ -1,105 +1,25 @@
 # Chainlink <> Terra demo
 
-TODO: What this demo is about?
+This repository contains a demo of using the Chainlink External Initiator with Flux Monitor to run a price feed on Terra.
 
-## Clone the repo and initialize submodules
-
-Make sure to clone the submodules as well as they are required for the whole docker setup to run.
+> This demo is still in active development
+## Clone the repo
 
 ```bash
-git clone --recurse-submodules https://github.com/hackbg/terra-chainlink-demo
+git clone https://github.com/hackbg/terra-chainlink-demo
 ```
 
-## Setup
-
-1. Prepare workspace
-
+## Prepare workspace
 ```bash
 ./scripts/bash/prepare-workspace.sh
 ```
 
-2. Run all services
+## Setup
+### Run the demo programmatically
+The following will start up 2 feeds with multiple accounts
 
 ```bash
 ./scripts/bash/setup.sh
-```
-
-3. Log into node operator console
-
-Go to http://localhost:6688. Credentials: `test@test.two:chainzzz`
-
-4. Initiate job runs to simulate 2 oracles in action
-
-Go to http://localhost:6688/jobs/new and use the following JSONs:
-
-```json
-{
-  "initiators": [
-    {
-      "type": "external",
-      "params": {
-        "name": "terra",
-        "body": {
-          "endpoint": "terra",
-          "contract_address": "terra1tndcaqxkpc5ce9qee5ggqf430mr2z3pefe5wj6",
-          "account_address": "terra1757tkx08n0cqrw7p86ny9lnxsqeth0wgp0em95",
-          "fluxmonitor": {
-            "requestData": {
-              "data": { "from": "LUNA", "to": "USD" }
-            },
-            "feeds": [{ "url": "http://coingecko-adapter:8080" }],
-            "threshold": 0.5,
-            "absoluteThreshold": 0,
-            "precision": 8,
-            "pollTimer": { "period": "30s" },
-            "idleTimer": { "duration": "1m" }
-          }
-        }
-      }
-    }
-  ],
-  "tasks": [
-    {
-      "type": "terra-adapter1",
-      "params": {}
-    }
-  ]
-}
-```
-
-```json
-{
-  "initiators": [
-    {
-      "type": "external",
-      "params": {
-        "name": "terra",
-        "body": {
-          "endpoint": "terra",
-          "contract_address": "terra1tndcaqxkpc5ce9qee5ggqf430mr2z3pefe5wj6",
-          "account_address": "terra17lmam6zguazs5q5u6z5mmx76uj63gldnse2pdp",
-          "fluxmonitor": {
-            "requestData": {
-              "data": { "from": "LUNA", "to": "USD" }
-            },
-            "feeds": [{ "url": "http://coingecko-adapter:8080" }],
-            "threshold": 0.5,
-            "absoluteThreshold": 0,
-            "precision": 8,
-            "pollTimer": { "period": "30s" },
-            "idleTimer": { "duration": "1m" }
-          }
-        }
-      }
-    }
-  ],
-  "tasks": [
-    {
-      "type": "terra-adapter2",
-      "params": {}
-    }
-  ]
-}
 ```
 
 ---
