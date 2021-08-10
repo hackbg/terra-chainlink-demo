@@ -2,6 +2,8 @@
 
 This repository contains a demo of using the Chainlink External Initiator with Flux Monitor to run a price feed on Terra.
 
+The demo runs 2 price feeds with multiple accounts, a separate Chainlink node and External Initiator are set up for each.
+
 > This demo is still in active development
 ## Clone the repo
 
