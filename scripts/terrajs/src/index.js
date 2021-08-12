@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, appendFileSync } from "fs";
 
 import {
   LCDClient,
@@ -18,6 +18,7 @@ const FLUX_PATH =
 const ORACLES = [
   "terra1757tkx08n0cqrw7p86ny9lnxsqeth0wgp0em95",
   "terra17lmam6zguazs5q5u6z5mmx76uj63gldnse2pdp",
+  "terra199vw7724lzkwz6lf2hsx04lrxfkz09tg8dlp6r"
 ];
 
 const mk = new MnemonicKey({
@@ -28,7 +29,7 @@ const mk = new MnemonicKey({
 const terra = new LCDClient({
   URL: "http://localhost:1317",
   chainID: "localterra",
-  gasPrices: { uluna: 1000000 },
+  gasPrices: { uluna: 0.015 },
 });
 
 const wallet = terra.wallet(mk);
@@ -37,52 +38,92 @@ run();
 
 async function run() {
   console.log("Uploading Flags and Deviation Flagging Validator...");
-  const flagsAddr = await uploadAndInstantiate(FLAGS_PATH, {
-    rac_address: "terra183rx7pqzjwj4mj7rxrrgv589zsfl22yeagalc0", // placeholder
-  });
-  const dfaAddr = await uploadAndInstantiate(VALIDATOR_PATH, {
-    flags: flagsAddr,
-    flagging_threshold: 5,
-  });
-
-  console.log("Uploading LINK Token...");
+  const flagsCodeId = await upload(FLAGS_PATH)
+    
+  const dfvCodeId = await upload(VALIDATOR_PATH)
+  
+  console.log("Uploading and instantiating LINK Token...");
   const linkAddr = await uploadAndInstantiate(LINK_PATH, {});
 
   const result = await terra.wasm.contractQuery(linkAddr, { token_info: {} });
   console.log(result);
 
   console.log("Uploading Flux Aggregator...");
-  const fluxAddr = await uploadAndInstantiate(FLUX_PATH, {
-    link: linkAddr,
-    payment_amount: "100",
-    validator: dfaAddr,
-    min_submission_value: "100000000",
-    max_submission_value: "10000000000",
-    timeout: 100,
-    decimals: 8,
-    description: "LUNA/USD",
-  });
-
-  console.log("Supplying Flux Aggregator with LINK...");
-  await sendLink(linkAddr, fluxAddr, "1000000");
-  await updateAvailableFunds(fluxAddr);
-
-  console.log(`Adding oracles: ${ORACLES}`);
-  await addOracles(fluxAddr, ORACLES);
-
+  const faCodeId = await upload(FLUX_PATH)
+  
+ 
   const deployedContracts = {
     LINK: linkAddr,
-    FLUX_AGGREGATOR: fluxAddr,
-    FLAGS: flagsAddr,
-    DEVIATION_FLAGGING_AGGREGATOR: dfaAddr,
-    ...ORACLES.reduce((acc, addr, i) => {
-      acc[`oracle_${i}`] = addr;
-      return acc;
-    }, {}),
+    FLUX_AGGREGATOR: faCodeId,
+    FLAGS: flagsCodeId,
+    DEVIATION_FLAGGING_VALIDATOR: dfvCodeId
   };
   console.table(deployedContracts);
 
   writeFileSync("./addresses.json", JSON.stringify(deployedContracts));
+  await addFeed(
+    {
+        payment_amount: "100",
+        min_submission_value: "100000000",
+        max_submission_value: "10000000000",
+        timeout: 100,
+        decimals: 8,
+        description: "LINK/USD",
+    }
+  )
+  await addFeed(
+    {
+        payment_amount: "100",
+        min_submission_value: "100000000",
+        max_submission_value: "10000000000",
+        timeout: 100,
+        decimals: 8,
+        description: "LUNA/USD",
+    }
+  )
+}
+
+async function addFeed(feedDetails) {
+  console.log("Adding feed: ", feedDetails)
+  const addresses = JSON.parse(readFileSync('addresses.json', { encoding: 'utf8' }));
+  console.log("Instantiating Flags...");
+
+  const flagsInstance = await instantiate(addresses['FLAGS'], {
+    rac_address: "terra183rx7pqzjwj4mj7rxrrgv589zsfl22yeagalc0", // placeholder
+  });
+  console.log("Instantiating Deviation Flagging Validator...");
+
+  const dfvInstance = await instantiate(addresses['DEVIATION_FLAGGING_VALIDATOR'], {
+    flags: flagsInstance,
+    flagging_threshold: 5,
+  });
+  console.log("Instantiating Flux Aggregator...");
+
+  const faInstance = await instantiate(addresses['FLUX_AGGREGATOR'], {
+    link: addresses['LINK'],
+    validator: dfvInstance,
+    ...feedDetails
+  });
+
+  console.log("Supplying Flux Aggregator with LINK...");
+  await sendLink(addresses['LINK'], faInstance, "1000000");
+  await updateAvailableFunds(faInstance);
+
+  console.log(`Adding oracles: ${ORACLES}`);
+  await addOracles(faInstance, ORACLES);
+  const deployedContracts = {
+      FLUX_AGGREGATOR: faInstance,
+      FLAGS: flagsInstance,
+      DEVIATION_FLAGGING_VALIDATOR: dfvInstance,
+      ...ORACLES.reduce((acc, addr, i) => {
+        acc[`oracle_${i}`] = addr;
+        return acc;
+      }, {}),
+    }
+  console.log("Instantiation of feed: ", feedDetails.description)
+  console.table(deployedContracts);
+
+  writeFileSync(`./addresses-${feedDetails.description.replace('/','')}.json`, JSON.stringify(deployedContracts));
 }
 
 async function sendLink(address, recipient, amount) {
@@ -110,7 +151,7 @@ async function addOracles(address, oracles) {
       removed: [],
       added: oracles,
       added_admins: oracles,
-      min_submissions: oracles.length,
+      min_submissions: oracles.length-1,
       max_submissions: oracles.length,
       restart_delay: 0,
     },
@@ -149,6 +190,17 @@ async function executeContract(address, msg) {
 }
 
 async function uploadAndInstantiate(contractPath, instantiateMsg) {
+  try {
+    const codeId = await upload(contractPath)
+    const contractAddress = await instantiate(codeId, instantiateMsg)
+    return contractAddress
+  } catch (error) {
+    console.error(error.toString());
+    process.exit(1);
+  }
+}
+
+async function upload(contractPath) {
   const wasm = readFileSync(contractPath);
   const tx = new MsgStoreCode(mk.accAddress, wasm.toString("base64"));
 
@@ -163,7 +215,15 @@ async function uploadAndInstantiate(contractPath, instantiateMsg) {
     console.log(storeResult.raw_log);
 
     const codeId = extractCodeId(storeResult.raw_log);
+    return codeId;
+  } catch (error) {
+    console.error(error.toString());
+    process.exit(1);
+  }
+}
 
+async function instantiate(codeId, instantiateMsg) {
+  try {
     const instantiate = new MsgInstantiateContract(
       mk.accAddress,
       mk.accAddress,

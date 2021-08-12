@@ -2,7 +2,10 @@
 
 set -e
 
-echo "" > ./external_initiator.env
+echo "" > ./external_initiator1.env
+echo "" > ./external_initiator2.env
+echo "" > ./external_initiator3.env
+
 
 git submodule update --init --recursive
 
