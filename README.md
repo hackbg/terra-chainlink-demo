@@ -5,6 +5,7 @@ This repository contains a demo of using the Chainlink External Initiator with F
 The demo runs 2 price feeds with multiple accounts, a separate Chainlink node and External Initiator are set up for each.
 
 > This demo is still in active development
+
 ## Clone the repo
 
 ```bash
@@ -12,12 +13,19 @@ git clone https://github.com/hackbg/terra-chainlink-demo
 ```
 
 ## Prepare workspace
+
 ```bash
 ./scripts/bash/prepare-workspace.sh
 ```
 
+## Set adapter keys
+
+Create an `.env` file and set the appropriate adapter API KEYS(can be retrieved for free by signing up at the provider websites) at the root folder, similar to the `.env.sample`
+
 ## Setup
+
 ### Run the demo programmatically
+
 The following will start up 2 feeds with multiple accounts
 
 ```bash
