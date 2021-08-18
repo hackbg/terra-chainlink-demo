@@ -6,6 +6,12 @@ echo "*** Run all ***"
 
 docker-compose down --remove-orphans --volumes
 
+./scripts/bash/run-terra.sh
+echo "Waiting for localterra services to be ready"
+sleep 6
+
+echo "{}" >file
+
 ./scripts/bash/setup-feeds.sh
 
 ./scripts/bash/setup-operators.sh
