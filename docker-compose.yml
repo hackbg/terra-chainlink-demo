@@ -75,7 +75,7 @@ services:
     command: terrad start
 
   fcd-collector:
-    image: terramoney/fcd:bombay
+    image: terramoney/fcd:1.0.0-alpha.12
     pull_policy: always
     depends_on:
       - terrad
@@ -99,7 +99,7 @@ services:
     command: start
 
   fcd-api:
-    image: terramoney/fcd:bombay
+    image: terramoney/fcd:1.0.0-alpha.12
     pull_policy: always
     depends_on:
       - terrad
