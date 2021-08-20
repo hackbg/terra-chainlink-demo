@@ -5,6 +5,7 @@ import {
   LCDClient
 } from "@terra-money/terra.js";
 
+// make this use env vars
 const terra = new LCDClient({
   URL: 'http://localhost:1317',
   chainID: 'localterra ',
