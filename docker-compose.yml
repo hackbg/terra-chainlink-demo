@@ -17,7 +17,7 @@ x-price-adapter-def: &price-adapter-def
     - terra
 
 x-chainlink-node-def: &cl-node-def
-  image: smartcontract/chainlink:0.10.11
+  image: smartcontract/chainlink:0.10.12
   restart: on-failure
   depends_on:
     - postgres

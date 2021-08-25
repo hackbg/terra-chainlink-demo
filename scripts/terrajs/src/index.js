@@ -27,9 +27,9 @@ const mk = new MnemonicKey({
 });
 
 const terra = new LCDClient({
-  URL: "http://localhost:1317",
-  chainID: "localterra",
-  gasPrices: { uluna: 0.15 },
+  URL: 'http://localhost:1317',
+  chainID: 'localterra ',
+  gasPrices: { uluna: 1000000},
 });
 
 const wallet = terra.wallet(mk);
@@ -203,7 +203,6 @@ async function uploadAndInstantiate(contractPath, instantiateMsg) {
 async function upload(contractPath) {
   const wasm = readFileSync(contractPath);
   const tx = new MsgStoreCode(mk.accAddress, wasm.toString("base64"));
-
   try {
     const storeResult = await wallet
       .createAndSignTx({
@@ -217,7 +216,7 @@ async function upload(contractPath) {
     const codeId = extractCodeId(storeResult.raw_log);
     return codeId;
   } catch (error) {
-    console.error(error.toString());
+    console.error(error);
     process.exit(1);
   }
 }
@@ -242,7 +241,7 @@ async function instantiate(codeId, instantiateMsg) {
 
     return extractContractAddress(instantiateResult.raw_log);
   } catch (error) {
-    console.error(error.toString());
+    console.error(error);
     process.exit(1);
   }
 }
