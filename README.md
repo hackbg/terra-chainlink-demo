@@ -18,9 +18,9 @@ git clone https://github.com/hackbg/terra-chainlink-demo
 ./scripts/bash/prepare-workspace.sh
 ```
 
-## Set adapter keys
+## Set adapter keys and env variables
 
-Create an `.env` file and set the appropriate adapter API KEYS(can be retrieved for free by signing up at the provider websites) at the root folder, similar to the `.env.sample`
+Create an `.env` file and set the appropriate adapter API KEYS(can be retrieved for free by signing up at the provider websites) and other env variables at the root folder, similar to the `.env.sample`
 
 ## Setup
 
@@ -28,8 +28,14 @@ Create an `.env` file and set the appropriate adapter API KEYS(can be retrieved 
 
 The following will start up 2 feeds with multiple accounts
 
+LocalTerra:
 ```bash
 ./scripts/bash/setup.sh
+```
+
+Testnet:
+```bash
+./scripts/bash/setup.sh bombay-testnet
 ```
 
 ---
