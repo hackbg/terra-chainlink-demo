@@ -42,7 +42,7 @@ x-chainlink-node-def: &cl-node-def
 
 x-ei-def: &ei-def
   image: terrademo/terra-ei
-  command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"ws://terrad:26657/websocket\"}'
+  command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"${WS_URL}\"}'
   depends_on:
     - postgres
   networks:
@@ -139,7 +139,7 @@ services:
     environment:
       - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_1?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-1:6688/
-      - TERRA_URL=http://terrad:1317
+      - TERRA_URL=${NODE_URL}
     env_file:
       - ./external_initiator1.env
 
@@ -148,7 +148,7 @@ services:
     environment:
       - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_2?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-2:6688/
-      - TERRA_URL=http://terrad:1317
+      - TERRA_URL=${NODE_URL}
     env_file:
       - ./external_initiator2.env
 
@@ -157,7 +157,7 @@ services:
     environment:
       - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_3?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-3:6688/
-      - TERRA_URL=http://terrad:1317
+      - TERRA_URL=${NODE_URL}
     env_file:
       - ./external_initiator3.env
 
@@ -188,27 +188,27 @@ services:
     ports:
       - "8086:8080"
     environment:
-      - FCD_URL=http://terrad:1317
-      - CHAIN_ID=localterra
-      - MNEMONIC=symbol force gallery make bulk round subway violin worry mixture penalty kingdom boring survey tool fringe patrol sausage hard admit remember broken alien absorb
+      - FCD_URL=${NODE_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - MNEMONIC=${ORACLE1}
 
   chain-adapter-2:
     <<: *chain-adapter-def
     ports:
       - "8087:8080"
     environment:
-      - FCD_URL=http://terrad:1317
-      - CHAIN_ID=localterra
-      - MNEMONIC=quality vacuum heart guard buzz spike sight swarm shove special gym robust assume sudden deposit grid alcohol choice devote leader tilt noodle tide penalty
+      - FCD_URL=${NODE_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - MNEMONIC=${ORACLE2}
 
   chain-adapter-3:
     <<: *chain-adapter-def
     ports:
       - "8088:8080"
     environment:
-      - FCD_URL=http://terrad:1317
-      - CHAIN_ID=localterra
-      - MNEMONIC=bounce success option birth apple portion aunt rural episode solution hockey pencil lend session cause hedgehog slender journey system canvas decorate razor catch empty
+      - FCD_URL=${NODE_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - MNEMONIC=${ORACLE3}
 
 volumes:
   pg: null

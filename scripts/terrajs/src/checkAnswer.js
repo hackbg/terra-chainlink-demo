@@ -1,15 +1,18 @@
-
 import { readFileSync } from "fs";
 
 import {
   LCDClient
 } from "@terra-money/terra.js";
 
-// make this use env vars
+import dotenv from "dotenv"
+import path from "path";
+
+dotenv.config({path: path.resolve(__dirname, "..", "..", "..", ".env")})
+
 const terra = new LCDClient({
-  URL: 'http://localhost:1317',
-  chainID: 'localterra ',
-  gasPrices: { uluna: 0.15 },
+  URL: process.env.NODE_URL.replace("terrad", "localhost"),
+  chainID: process.env.CHAIN_ID,
+  gasPrices: { uluna: process.env.DEAFAULT_GAS_PRICE },
 });
 
 run();
