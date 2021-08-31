@@ -26,5 +26,7 @@ add_ei "3"
 docker-compose up -d external-initiator-1 external-initiator-2 external-initiator-3
 echo "Waiting for external initiators to be ready"
 sleep 10
+LINKUSD_AGGREGATOR=($(jq -r '.contracts | keys[0]' ./scripts/terrajs/addresses.json))
+LUNAUSD_AGGREGATOR=($(jq -r '.contracts | keys[1]' ./scripts/terrajs/addresses.json))
 
-./scripts/bash/add-jobspecs.sh
+./scripts/bash/add-jobspecs.sh $LINKUSD_AGGREGATOR $LUNAUSD_AGGREGATOR

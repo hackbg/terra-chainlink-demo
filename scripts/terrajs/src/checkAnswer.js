@@ -1,27 +1,29 @@
-
 import { readFileSync } from "fs";
 
 import {
   LCDClient
 } from "@terra-money/terra.js";
 
+import dotenv from "dotenv"
+import path from "path";
+
+dotenv.config({path: path.resolve(__dirname, "..", "..", "..", ".env")})
+
 const terra = new LCDClient({
-  URL: "http://localhost:1317",
-  chainID: "localterra",
-  gasPrices: { uluna: 0.15 },
+  URL: process.env.NODE_URL.replace("terrad", "localhost"),
+  chainID: process.env.CHAIN_ID,
+  gasPrices: { uluna: process.env.DEAFAULT_GAS_PRICE },
 });
 
 run();
 
 async function run() {
-  const addressesLINKUSD = JSON.parse(readFileSync('addresses-LINKUSD.json', { encoding: 'utf8' }));
-  const resultLINKUSD = await terra.wasm.contractQuery(addressesLINKUSD['AGGREGATOR_PROXY'], { get_latest_round_data: {} });
-  console.log("LINK / USD answer:");
-  console.log(resultLINKUSD);
-
-  const addressesLUNAUSD = JSON.parse(readFileSync('addresses-LUNAUSD.json', { encoding: 'utf8' }));
-  const resultLUNAUSD = await terra.wasm.contractQuery(addressesLUNAUSD['AGGREGATOR_PROXY'], { get_latest_round_data: {} });
-  console.log("LUNA / USD answer:");
-  console.log(resultLUNAUSD);
+  const addresses = JSON.parse(readFileSync('addresses.json', { encoding: 'utf8' }));
+  Object.entries(addresses.contracts).forEach(async c => {
+      const result = await terra.wasm.contractQuery(c[1].aggregator, { get_latest_round_data: {} });
+      console.log(`${c[1].name} answer:`)
+      console.log(result)
+    }
+  )
 }
 
