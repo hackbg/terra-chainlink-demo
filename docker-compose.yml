@@ -222,7 +222,7 @@ services:
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
     ports:
-          - 9091:9090
+          - 9093:9090
     links:
       - terrad:terrad
     depends_on:
@@ -242,10 +242,54 @@ services:
     environment: 
       - TERRA_RPC=terrad:9090
       - TENDERMINT_RPC=http://terrad:26657
+      - WS_URL=terrad:26657
+      - KAFKA_SERVER=kafka:9092
       - GRPC_GO_LOG_VERBOSITY_LEVEL=99
+      - TOPIC=Terra
       - GRPC_GO_LOG_SEVERITY_LEVEL=info
+      - CONFIG_URL=http://pseudo-config:4000
     networks:
       - terra
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment: 
+     - ZOOKEEPER_CLIENT_PORT=2181
+     - ZOOKEEPER_TICK_TIME=2000
+    ports:
+      - "2181:2181"
+    networks:
+      - terra
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports: 
+      - "29092:29092"
+    environment: 
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - TOPIC_AUTO_CREATE=true
+    networks:
+      - terra
+  consumer:
+    image: test-consumer
+    networks:
+      - terra
+    environment: 
+      - KAFKA_SERVER=kafka:9092
+      - TOPIC=Terra
+      - GROUP_ID=0
+  pseudo-config:
+    image: pseudo-config
+    networks:
+      - terra
+    ports:
+      - "4000:4000"
 
 volumes:
   pg: null

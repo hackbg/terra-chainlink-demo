@@ -1,14 +1,14 @@
 global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
-  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_interval:     3s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 3s # By default, scrape targets every 15 seconds.
 rule_files:
 
 scrape_configs:
 - job_name: terrad
-  scrape_interval: 5s
+  scrape_interval: 4s
   static_configs:
     - targets: ['terrad:26660']
 - job_name: flux-monitor
-  scrape_interval: 5s
+  scrape_interval: 1s
   static_configs:
     - targets: ['terra-chainlink-exporter:8089']
