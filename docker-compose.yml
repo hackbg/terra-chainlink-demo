@@ -276,20 +276,20 @@ services:
       - TOPIC_AUTO_CREATE=true
     networks:
       - terra
-  consumer:
-    image: test-consumer
-    networks:
-      - terra
-    environment: 
-      - KAFKA_SERVER=kafka:9092
-      - TOPIC=Terra
-      - GROUP_ID=0
-  pseudo-config:
-    image: pseudo-config
-    networks:
-      - terra
-    ports:
-      - "4000:4000"
+  # consumer:
+  #   image: test-consumer
+  #   networks:
+  #     - terra
+  #   environment: 
+  #     - KAFKA_SERVER=kafka:9092
+  #     - TOPIC=Terra
+  #     - GROUP_ID=0
+  # pseudo-config:
+  #   image: pseudo-config
+  #   networks:
+  #     - terra
+  #   ports:
+  #     - "4000:4000"
 
 volumes:
   pg: null
