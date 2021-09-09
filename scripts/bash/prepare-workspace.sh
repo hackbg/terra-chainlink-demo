@@ -6,13 +6,13 @@ echo "" > ./external_initiator1.env
 echo "" > ./external_initiator2.env
 echo "" > ./external_initiator3.env
 
-
-git submodule update --init --recursive
+git submodule sync --recursive
+git submodule update --remote --init --recursive
 
 (cd ./scripts/terrajs && yarn)
 
 (cd ./external-initiator && docker build . -t terrademo/terra-ei)
 
 (cd ./external-adapters && yarn && yarn setup && \
-    # yarn generate:docker-compose && \
+    yarn generate:docker-compose && \
     docker-compose -f docker-compose.generated.yaml build terra-adapter)
