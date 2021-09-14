@@ -30,8 +30,8 @@ const mk = new MnemonicKey({
 
 const terra = new LCDClient({
   URL: 'http://localhost:1317',
-  chainID: 'localterra ',
-  gasPrices: { uluna: 0.15},
+  chainID: 'localterra',
+  gasPrices: { uluna: 0.15 },
 });
 
 const wallet = terra.wallet(mk);
