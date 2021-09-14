@@ -1,19 +1,19 @@
 [submodule "external-adapters"]
 	path = external-adapters
-	url = https://github.com/hackbg/external-adapters-js
-	branch = feature/terra-ea-refactor
+	url = https://github.com/smartcontractkit/external-adapters-js
+	branch = feature/terra-adapter
 [submodule "LocalTerra"]
 	path = LocalTerra
 	url = https://github.com/terra-money/LocalTerra
-	branch = bombay
+	branch = main
 [submodule "terra-contracts/contracts"]
 	path = terra-contracts/contracts
 	url = https://github.com/hackbg/chainlink-terra-cosmwasm-contracts
-	branch = feature/flux-aggregator-improvements
+	branch = develop
 [submodule "external-initiator"]
 	path = external-initiator
-	url = https://github.com/hackbg/external-initiator.git
-	branch = feature/terra-integration
+	url = https://github.com/smartcontractkit/external-initiator
+	branch = terra-lite
 [submodule "terra-fm-metrics-exporter"]
 	path = terra-fm-metrics-exporter
 	url = git@github.com:hackbg/terra-fm-metrics-exporter.git

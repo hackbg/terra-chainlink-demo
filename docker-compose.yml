@@ -17,7 +17,7 @@ x-price-adapter-def: &price-adapter-def
     - terra
 
 x-chainlink-node-def: &cl-node-def
-  image: smartcontract/chainlink:0.10.12
+  image: public.ecr.aws/chainlink/chainlink:develop.e35f15f36bb9a07542fc67251aea17366358df64
   restart: on-failure
   depends_on:
     - postgres
@@ -193,6 +193,7 @@ services:
       - FCD_URL=${NODE_URL}
       - CHAIN_ID=${CHAIN_ID}
       - MNEMONIC=${ORACLE1}
+      - GAS_PRICES=${DEFAULT_GAS_PRICE}
 
   chain-adapter-2:
     <<: *chain-adapter-def
@@ -202,6 +203,7 @@ services:
       - FCD_URL=${NODE_URL}
       - CHAIN_ID=${CHAIN_ID}
       - MNEMONIC=${ORACLE2}
+      - GAS_PRICES=${DEFAULT_GAS_PRICE}
 
   chain-adapter-3:
     <<: *chain-adapter-def
@@ -211,6 +213,7 @@ services:
       - FCD_URL=${NODE_URL}
       - CHAIN_ID=${CHAIN_ID}
       - MNEMONIC=${ORACLE3}
+      - GAS_PRICES=${DEFAULT_GAS_PRICE}
   prometheus:
     image: prom/prometheus:v2.1.0
     volumes:
