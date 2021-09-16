@@ -3,17 +3,10 @@
 source ./scripts/bash/common.sh
 echo "Adding JobSpecs to Chainlink node..."
 
-# LINKUSD_AGGREGATOR=($(jq -r '.contracts | keys[0]' ./scripts/terrajs/addresses-timeout-0.json))
-# LUNAUSD_AGGREGATOR=($(jq -r '.contracts | keys[1]' ./scripts/terrajs/addresses-timeout-0.json))
-# LINKETH_AGGREGATOR=($(jq -r '.contracts | keys[2]' ./scripts/terrajs/addresses-timeout-0.json))
-# BTCUSD_AGGREGATOR=($(jq -r '.contracts | keys[3]' ./scripts/terrajs/addresses-timeout-0.json))
-LINKUSD_AGGREGATOR=($(jq -r '.contracts | keys[0]' ./scripts/terrajs/addresses-timeout-60-1-submission.json))
-LUNAUSD_AGGREGATOR=($(jq -r '.contracts | keys[1]' ./scripts/terrajs/addresses-timeout-60-1-submission.json))
-AAPLUSD_AGGREGATOR=($(jq -r '.contracts | keys[2]' ./scripts/terrajs/addresses-timeout-60-1-submission.json))
-GOOGLUSD_AGGREGATOR=($(jq -r '.contracts | keys[3]' ./scripts/terrajs/addresses-timeout-60-1-submission.json))
-
-
-
+LINKUSD_AGGREGATOR=($(jq -r '.contracts | keys[0]' ./scripts/terrajs/addresses-mixed.json))
+LUNAUSD_AGGREGATOR=($(jq -r '.contracts | keys[1]' ./scripts/terrajs/addresses-mixed.json))
+AAPLUSD_AGGREGATOR=($(jq -r '.contracts | keys[2]' ./scripts/terrajs/addresses-mixed.json))
+GOOGLUSD_AGGREGATOR=($(jq -r '.contracts | keys[3]' ./scripts/terrajs/addresses-mixed.json))
 
 
 function jobspec() {
@@ -33,7 +26,7 @@ externalInitiators = [\n
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
     \\\\\\"pollTimer\\\\\\": { \\\\\\"period\\\\\\": \\\\\\"30s\\\\\\" }, 
-    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"50s\\\\\\" } } } \" }\n]\n
+    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"40s\\\\\\" } } } \" }\n]\n
 observationSource   = \"\"\"\n    
 parse_request  [type=jsonparse path=\"\" data=\"\$(jobRun.requestBody)\"]\n    
 send_to_bridge [type=bridge name=\"$2\" 
@@ -60,7 +53,7 @@ externalInitiators = [\n
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
     \\\\\\"pollTimer\\\\\\": { \\\\\\"period\\\\\\": \\\\\\"30s\\\\\\" }, 
-    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"50s\\\\\\" } } } \" }\n]\n
+    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"40s\\\\\\" } } } \" }\n]\n
 observationSource   = \"\"\"\n    
 parse_request  [type=jsonparse path=\"\" data=\"\$(jobRun.requestBody)\"]\n    
 send_to_bridge [type=bridge name=\"$2\" 
@@ -89,7 +82,7 @@ externalInitiators = [\n
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
     \\\\\\"pollTimer\\\\\\": { \\\\\\"period\\\\\\": \\\\\\"30s\\\\\\" }, 
-    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"50s\\\\\\" } } } \" }\n]\n
+    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"40s\\\\\\" } } } \" }\n]\n
 observationSource   = \"\"\"\n    
 parse_request  [type=jsonparse path=\"\" data=\"\$(jobRun.requestBody)\"]\n    
 send_to_bridge [type=bridge name=\"$2\" 
@@ -117,7 +110,7 @@ externalInitiators = [\n
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
     \\\\\\"pollTimer\\\\\\": { \\\\\\"period\\\\\\": \\\\\\"30s\\\\\\" }, 
-    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"50s\\\\\\" } } } \" }\n]\n
+    \\\\\\"idleTimer\\\\\\": { \\\\\\"duration\\\\\\": \\\\\\"40s\\\\\\" } } } \" }\n]\n
 observationSource   = \"\"\"\n    
 parse_request  [type=jsonparse path=\"\" data=\"\$(jobRun.requestBody)\"]\n    
 send_to_bridge [type=bridge name=\"$2\" 
