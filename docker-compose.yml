@@ -43,6 +43,7 @@ x-ei-def: &ei-def
     - /home/benorios/Desktop/chainlink/external-initiator/:/dir
   environment:
     - EI_FM_ADAPTER_TIMEOUT=5s
+    - CL_TIMEOUT=20s
 
 services:
   postgres-cl:
