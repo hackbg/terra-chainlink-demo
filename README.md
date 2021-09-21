@@ -6,6 +6,12 @@ The demo runs 2 price feeds with multiple accounts, a separate Chainlink node an
 
 > This demo is still in active development
 
+## Requirements
+
+- [Node.js](https://nodejs.org/en/download/)
+- [yarn](https://classic.yarnpkg.com/en/docs/install/)
+- [docker-compose](https://docs.docker.com/compose/install/) version 1.27.0 or later
+
 ## Clone the repo
 
 ```bash
