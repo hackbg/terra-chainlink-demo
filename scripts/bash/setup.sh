@@ -6,9 +6,9 @@ echo "*** Run all ***"
 
 docker-compose down --remove-orphans --volumes
 
-# skip if bombay deployment
 rm -rf ./scripts/terrajs/addresses.json
 echo "{}" > ./scripts/terrajs/addresses.json
+# skip if bombay deployment
 ./scripts/bash/run-terra.sh
 echo "Waiting for localterra services to be ready"
 sleep 6

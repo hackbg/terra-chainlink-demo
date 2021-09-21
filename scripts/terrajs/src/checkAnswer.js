@@ -12,7 +12,7 @@ dotenv.config({path: path.resolve(__dirname, "..", "..", "..", ".env")})
 const terra = new LCDClient({
   URL: process.env.NODE_URL.replace("terrad", "localhost"),
   chainID: process.env.CHAIN_ID,
-  gasPrices: { uluna: process.env.DEAFAULT_GAS_PRICE },
+  gasPrices: { uluna: process.env.DEFAULT_GAS_PRICE },
 });
 
 run();

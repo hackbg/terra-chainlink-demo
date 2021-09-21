@@ -47,13 +47,28 @@ x-ei-def: &ei-def
     - postgres
   networks:
     - terra
+  environment:
+    - EI_FM_ADAPTER_TIMEOUT=5s
+    - CL_TIMEOUT=20s
 
 services:
+  postgres-cl:
+    image: postgres:13
+    restart: on-failure
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=chainlink_1,chainlink_2,chainlink_3,ei_1,ei_2,ei_3
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./docker-init-scripts/postgres:/docker-entrypoint-initdb.d
+      - pg-cl:/var/lib/postgresql/data
+    networks:
+      - terra
+
   postgres:
     image: postgres:13
     restart: on-failure
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=chainlink_1,chainlink_2,chainlink_3,ei_1,ei_2,ei_3,fcd
+      - POSTGRES_MULTIPLE_DATABASES=fcd
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - ./LocalTerra/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -75,6 +90,7 @@ services:
       - "9090:9090"
       - "9091:9091"
     command: terrad start
+
   fcd-collector:
     image: terramoney/fcd:1.0.0-beta.2
     pull_policy: always
@@ -119,26 +135,26 @@ services:
     ports:
       - "6691:6688"
     environment:
-      - DATABASE_URL=postgresql://postgres@postgres:5432/chainlink_1?sslmode=disable
+      - DATABASE_URL=postgresql://postgres@postgres-cl:5432/chainlink_1?sslmode=disable
 
   chainlink-node-2:
     <<: *cl-node-def
     ports:
       - "6692:6688"
     environment:
-      - DATABASE_URL=postgresql://postgres@postgres:5432/chainlink_2?sslmode=disable
+      - DATABASE_URL=postgresql://postgres@postgres-cl:5432/chainlink_2?sslmode=disable
 
   chainlink-node-3:
     <<: *cl-node-def
     ports:
       - "6693:6688"
     environment:
-      - DATABASE_URL=postgresql://postgres@postgres:5432/chainlink_3?sslmode=disable
+      - DATABASE_URL=postgresql://postgres@postgres-cl:5432/chainlink_3?sslmode=disable
 
   external-initiator-1:
     <<: *ei-def
     environment:
-      - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_1?sslmode=disable
+      - EI_DATABASEURL=postgresql://postgres@postgres-cl:5432/ei_1?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-1:6688/
       - TERRA_URL=${NODE_URL}
     env_file:
@@ -147,7 +163,7 @@ services:
   external-initiator-2:
     <<: *ei-def
     environment:
-      - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_2?sslmode=disable
+      - EI_DATABASEURL=postgresql://postgres@postgres-cl:5432/ei_2?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-2:6688/
       - TERRA_URL=${NODE_URL}
     env_file:
@@ -156,33 +172,59 @@ services:
   external-initiator-3:
     <<: *ei-def
     environment:
-      - EI_DATABASEURL=postgresql://postgres@postgres:5432/ei_3?sslmode=disable
+      - EI_DATABASEURL=postgresql://postgres@postgres-cl:5432/ei_3?sslmode=disable
       - EI_CHAINLINKURL=http://chainlink-node-3:6688/
       - TERRA_URL=${NODE_URL}
     env_file:
       - ./external_initiator3.env
 
-  price-adapter-1:
+  crypto-price-adapter-1:
     <<: *price-adapter-def
     image: public.ecr.aws/chainlink-staging/adapters/coingecko-adapter:develop-latest
     ports:
-      - "8083:8080"
+      - "8061:8080"
+    environment:
+      - "API_KEY=${COINGECKO_API_KEY}"
 
-  price-adapter-2:
+  crypto-price-adapter-2:
     <<: *price-adapter-def
     image: public.ecr.aws/chainlink-staging/adapters/cryptoapis-adapter:develop-latest
     ports:
-      - "8084:8080"
+      - "8062:8080"
     environment:
       - "API_KEY=${CRYPTOAPIS_API_KEY}"
 
-  price-adapter-3:
+  crypto-price-adapter-3:
     <<: *price-adapter-def
     image: public.ecr.aws/chainlink-staging/adapters/cryptocompare-adapter:develop-latest
     ports:
-      - "8085:8080"
+      - "8063:8080"
     environment:
       - "API_KEY=${CRYPTOCOMPARE_API_KEY}"
+
+  stock-price-adapter-1:
+    <<: *price-adapter-def
+    image: public.ecr.aws/chainlink-staging/adapters/tradermade-adapter:develop-latest
+    ports:
+      - "8071:8080"
+    environment:
+      - "API_KEY=${TRADERMADE_API_KEY}"
+
+  stock-price-adapter-2:
+    <<: *price-adapter-def
+    image: public.ecr.aws/chainlink-staging/adapters/intrinio-adapter:develop-latest
+    ports:
+      - "8072:8080"
+    environment:
+      - "API_KEY=${INTRINIO_API_KEY}"
+
+  stock-price-adapter-3:
+    <<: *price-adapter-def
+    image: public.ecr.aws/chainlink-staging/adapters/iex-cloud-adapter:develop-latest
+    ports:
+      - "8073:8080"
+    environment:
+      - "API_KEY=${IEX_CLOUD_API_KEY}"
 
   chain-adapter-1:
     <<: *chain-adapter-def
@@ -216,6 +258,7 @@ services:
 
 volumes:
   pg: null
+  pg-cl: null
   cl: null
   chain: null
 secrets:
