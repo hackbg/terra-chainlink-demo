@@ -11,7 +11,7 @@ payload1=$(
   cat <<EOF
 {
 "name": "terra-adapter1",
-"url": "http://172.17.0.1:8091/"
+"url": "http://chain-adapter-1:8080/"
 }
 EOF
 )
@@ -26,7 +26,7 @@ payload2=$(
   cat <<EOF
 {
 "name": "terra-adapter2",
-"url": "http://172.17.0.1:8092/"
+"url": "http://chain-adapter-2:8080/"
 }
 EOF
 )
@@ -41,7 +41,7 @@ payload3=$(
   cat <<EOF
 {
 "name": "terra-adapter3",
-"url": "http://172.17.0.1:8093/"
+"url": "http://chain-adapter-3:8080/"
 }
 EOF
 )

@@ -4,9 +4,9 @@ set -e
 
 echo "*** Run all ***"
 
-docker-compose down --remove-orphans --volumes
+# docker-compose down --remove-orphans --volumes
 
-# skip if bombay deployment
+# # skip if bombay deployment
 # rm -rf ./scripts/terrajs/addresses.json
 # echo "{}" > ./scripts/terrajs/addresses.json
 # ./scripts/bash/run-terra.sh

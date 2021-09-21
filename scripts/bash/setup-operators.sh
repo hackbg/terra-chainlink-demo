@@ -7,7 +7,7 @@ echo "*** Run node operators ***"
 echo "Starting Chainlink nodes "
 docker-compose up -d postgres-cl chainlink-node-1 chainlink-node-2 chainlink-node-3
 echo "Waiting for chainlink nodes to be ready"
-sleep 90
+sleep 20
 
 echo "Starting Chain adapters"
 docker-compose up -d chain-adapter-1 chain-adapter-2 chain-adapter-3
@@ -25,6 +25,6 @@ add_ei "3"
 
 docker-compose up -d external-initiator-1 external-initiator-2 external-initiator-3
 echo "Waiting for external initiators to be ready"
-sleep 50
+sleep 20
 
 ./scripts/bash/add-jobspecs.sh

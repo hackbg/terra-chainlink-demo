@@ -17,7 +17,7 @@ x-price-adapter-def: &price-adapter-def
     - terra
 
 x-chainlink-node-def: &cl-node-def
-  image: 50a2ed9b977a
+  image: public.ecr.aws/chainlink/chainlink:develop.e35f15f36bb9a07542fc67251aea17366358df64
   restart: on-failure
   depends_on:
     - postgres
@@ -27,20 +27,26 @@ x-chainlink-node-def: &cl-node-def
   env_file:
     - ./chainlink.env
   volumes:
-    - /home/benorios/Desktop/chainlink/chainlink/:/dir
     - .:/host
   networks:
     - terra
+  entrypoint:
+    - chainlink
+    - node
+    - start
+    - "-d"
+    - "-p"
+    - /run/secrets/node_password
+    - "-a"
+    - /run/secrets/apicredentials
 
 x-ei-def: &ei-def
-  image: ee7faf3f8825
-  # command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"${WS_URL}\"}'
+  image: terrademo/terra-ei
+  command: '{\"name\":\"terra\",\"type\":\"terra\",\"url\":\"${WS_URL}\"}'
   depends_on:
-    - postgres-cl
+    - postgres
   networks:
     - terra
-  volumes:
-    - /home/benorios/Desktop/chainlink/external-initiator/:/dir
   environment:
     - EI_FM_ADAPTER_TIMEOUT=5s
     - CL_TIMEOUT=20s
