@@ -7,7 +7,7 @@
     "checkAnswer": "node -r esm src/checkAnswer.js"
   },
   "dependencies": {
-    "@terra-money/terra.js": "^2.0.0-beta.8",
+    "@terra-money/terra.js": "^2.1.2",
     "add": "^2.0.6",
     "dotenv": "^10.0.0",
     "yarn": "^1.22.10"
