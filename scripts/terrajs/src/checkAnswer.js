@@ -20,8 +20,8 @@ run();
 async function run() {
   const addresses = JSON.parse(readFileSync('addresses.json', { encoding: 'utf8' }));
   Object.entries(addresses.contracts).forEach(async c => {
-      const result = await terra.wasm.contractQuery(c[1].aggregator, { get_latest_round_data: {} });
-      console.log(`${c[1].name} answer:`)
+    const result = await terra.wasm.contractQuery(c[1].aggregator, { aggregator_query: { get_latest_round_data: {} }});
+    console.log(`${c[1].name} answer:`)
       console.log(result)
     }
   )
