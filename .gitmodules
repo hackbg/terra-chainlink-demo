@@ -17,3 +17,4 @@
 [submodule "terra-fm-metrics-exporter"]
 	path = terra-fm-metrics-exporter
 	url = git@github.com:hackbg/terra-fm-metrics-exporter.git
+	branch = conn-per-feed
