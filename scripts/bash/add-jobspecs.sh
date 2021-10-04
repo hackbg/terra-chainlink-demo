@@ -160,7 +160,7 @@ externalInitiators = [\n
 \\\\\\"account_address\\\\\\": \\\\\\"$1\\\\\\", 
 \\\\\\"fluxmonitor\\\\\\": { 
     \\\\\\"requestData\\\\\\": { \\\\\\"data\\\\\\": { \\\\\\"from\\\\\\": \\\\\\"AAPL\\\\\\", \\\\\\"to\\\\\\": \\\\\\"USD\\\\\\" } }, 
-    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-1:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-2:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
+    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
     \\\\\\"threshold\\\\\\": 0.3, 
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
@@ -188,7 +188,7 @@ externalInitiators = [\n
 \\\\\\"account_address\\\\\\": \\\\\\"$1\\\\\\", 
 \\\\\\"fluxmonitor\\\\\\": { 
     \\\\\\"requestData\\\\\\": { \\\\\\"data\\\\\\": { \\\\\\"from\\\\\\": \\\\\\"GOOGL\\\\\\", \\\\\\"to\\\\\\": \\\\\\"USD\\\\\\" } }, 
-    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-1:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-2:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
+    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
     \\\\\\"threshold\\\\\\": 0.3, 
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
@@ -216,7 +216,7 @@ externalInitiators = [\n
 \\\\\\"account_address\\\\\\": \\\\\\"$1\\\\\\", 
 \\\\\\"fluxmonitor\\\\\\": { 
     \\\\\\"requestData\\\\\\": { \\\\\\"data\\\\\\": { \\\\\\"from\\\\\\": \\\\\\"FB\\\\\\" } }, 
-    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-1:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-2:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
+    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
     \\\\\\"threshold\\\\\\": 0.3, 
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 
@@ -244,7 +244,7 @@ externalInitiators = [\n
 \\\\\\"account_address\\\\\\": \\\\\\"$1\\\\\\", 
 \\\\\\"fluxmonitor\\\\\\": { 
     \\\\\\"requestData\\\\\\": { \\\\\\"data\\\\\\": { \\\\\\"from\\\\\\": \\\\\\"AMZN\\\\\\" } }, 
-    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-1:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-2:8080\\\\\\" },{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
+    \\\\\\"feeds\\\\\\": [{ \\\\\\"url\\\\\\": \\\\\\"http://stock-price-adapter-3:8080\\\\\\" }], 
     \\\\\\"threshold\\\\\\": 0.3, 
     \\\\\\"absoluteThreshold\\\\\\": 0, 
     \\\\\\"precision\\\\\\": 8, 

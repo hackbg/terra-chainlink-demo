@@ -28,7 +28,6 @@ docker-compose exec kafka kafka-topics --create --bootstrap-server localhost:909
 
 docker-compose up -d prometheus
 docker-compose up -d terra-chainlink-exporter
-docker-compose up -d consumer
 
 echo "Waiting a bit for the answer to be written on-chain"
 sleep 30

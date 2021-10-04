@@ -285,13 +285,13 @@ services:
     links:
       - terrad:terrad
     environment: 
-      - TERRA_RPC=terrad:9090
-      - TENDERMINT_URL=http://terrad:26657
-      - KAFKA_SERVER=kafka:9092
-      - GRPC_GO_LOG_VERBOSITY_LEVEL=99
-      - TOPIC=Terra
-      - CONFIG_URL=http://pseudo-config:4000
-      - SERVICE_PORT=8089
+      - TERRA_RPC=${TERRA_RPC}
+      - TENDERMINT_URL=${TENDERMINT_RPC}
+      - KAFKA_SERVER=${KAFKA_SERVER}
+      - TOPIC=${TOPIC}
+      - CONFIG_URL=${CONFIG_URL}
+      - SERVICE_PORT=${SERVICE_PORT}
+      - POLLING_INTERVAL=${POLLING_INTERVAL}
     networks:
       - terra
   zookeeper:
@@ -320,16 +320,8 @@ services:
       - TOPIC_AUTO_CREATE=true
     networks:
       - terra
-  consumer:
-    image: test-consumer
-    networks:
-      - terra
-    environment: 
-      - KAFKA_SERVER=kafka:9092
-      - TOPIC=Terra
-      - GROUP_ID=0
   pseudo-config:
-    image: pseudo-config
+    image: hackbg/metrics-pseudo-feeder
     networks:
       - terra
     ports:
