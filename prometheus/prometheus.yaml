@@ -4,11 +4,7 @@ global:
 rule_files:
 
 scrape_configs:
-- job_name: terrad
-  scrape_interval: 15s
-  static_configs:
-    - targets: ['terrad:26660']
 - job_name: flux-monitor
-  scrape_interval: 5s
+  scrape_interval: 30s
   static_configs:
     - targets: ['terra-chainlink-exporter:8089']
